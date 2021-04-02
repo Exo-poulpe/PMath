@@ -3,10 +3,10 @@
 -- ---
 
 -- Simple entry for library porting
-entry my_power (n: f32,m: f32): f32 = n**m
+let my_power (n: f32,m: f32): f32 = n**m
 
 -- Simple entry for library porting
-entry my_divisor (n: f32, m: f32): f32 = n/m
+let my_divisor (n: f32, m: f32): f32 = n/m
 
 
 -- Iterate test
@@ -35,9 +35,33 @@ in filter(\temp ->
 
   (res)
 
+
+let little_fermat(n: i64,m: i64): i64 = 
+    ((n-1)*(m-1))
+
+
 -- Compute PGCD of 2 number and return value
 let pgcd(n: i64,m: i64): i64 =
-  let (a,res) = iterate_until(\(tmp_n,tmp_p) -> if tmp_n%tmp_p==0 then true else false  )
+  let (_,res) = iterate_until(\(tmp_n,tmp_p) -> if tmp_n%tmp_p==0 then true else false  )
                (\(tmp_n,tmp_p) -> (tmp_p,tmp_n%tmp_p))
                (n,m)
   in res
+
+
+let find_p_q_check_value(n: i64, e: i64, tmp_p: i64, tmp_q: i64): bool = 
+    if (is_prime(tmp_q) || is_prime(tmp_p)) && (pgcd(tmp_q,tmp_p) == 1 && (tmp_p*tmp_q)==n) then
+        if pgcd(e,little_fermat(tmp_p,tmp_q))==1 then
+            true
+        else
+            false
+    else
+        false
+
+let find_p_q(n: i64, e:i64): (i64,i64) = 
+    let (p,q) = iterate_until(\(tmp_p,tmp_q) -> find_p_q_check_value(n,e,tmp_p,tmp_q) )
+                              (\(tmp_p,tmp_q) -> (tmp_p+1, n / tmp_p) )(2,n/2)
+    in (p,q)
+
+let main(n: i64): (i64,i64) = 
+    find_p_q(4,1721)
+
