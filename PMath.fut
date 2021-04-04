@@ -18,7 +18,7 @@ let my_divisor (n: f32, m: f32): f32 = n/m
 
 -- Test if number is prime
 let is_prime(n: i64): bool =
-    all(\elem -> if n%elem != 0 || n == elem then true else false  ) (map(+1)( tabulate(n**1/2)(\i -> i+1) ))
+    any(\elem -> if n%elem != 0 || n == elem then true else false  ) (map(+1)( tabulate(n**1/2)(\i -> i+1) ))
 
 
 -- List all primal number from 2 to n
@@ -47,21 +47,25 @@ let pgcd(n: i64,m: i64): i64 =
                (n,m)
   in res
 
-
+-- Test for value in finding_p_q
 let find_p_q_check_value(n: i64, e: i64, tmp_p: i64, tmp_q: i64): bool = 
-    if (is_prime(tmp_q) || is_prime(tmp_p)) && (pgcd(tmp_q,tmp_p) == 1 && (tmp_p*tmp_q)==n) then
+    if  (pgcd(tmp_q,tmp_p) == 1 && (tmp_p*tmp_q)==n) then
+      if (is_prime(tmp_q) || is_prime(tmp_p)) then
         if pgcd(e,little_fermat(tmp_p,tmp_q))==1 then
             true
         else
             false
+      else 
+        false
     else
         false
 
+-- Find p q from (n,e) of RSA message
 let find_p_q(n: i64, e:i64): (i64,i64) = 
     let (p,q) = iterate_until(\(tmp_p,tmp_q) -> find_p_q_check_value(n,e,tmp_p,tmp_q) )
-                              (\(tmp_p,tmp_q) -> (tmp_p+1, n / tmp_p) )(2,n/2)
+                              (\(tmp_p,_) -> (tmp_p+1, n / tmp_p) )(2,n/2)
     in (p,q)
 
-let main(n: i64): (i64,i64) = 
-    find_p_q(4,1721)
-
+let main(_: i64): bool = --(i64,i64) = 
+    --find_p_q(7266118032323,827)
+    is_prime(7266118032323)
