@@ -3,3 +3,5 @@ Exe
 *.exe
 *.bin
 *.zip
+*.c
+LightMath
