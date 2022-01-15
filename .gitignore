@@ -1,2 +1,5 @@
-!*.fut
-*
+*.o
+Exe
+*.exe
+*.bin
+*.zip
