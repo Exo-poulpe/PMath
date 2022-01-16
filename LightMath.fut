@@ -27,26 +27,8 @@ def euclid_ppcm((i:i64,j:i64)) : i64 =
 -- find P & Q (https://www.geeksforgeeks.org/how-to-solve-rsa-algorithm-problems/)
 def find_p_q(n:i64) : []i64 = 
     let a = prime_array(n)
-    let res:[]bool = map(\i -> any(\k -> k==n)(map(\j -> i*j)(a)) )(a)
-    let tmp:[]i64 = map2(\a b -> if b then a else 0)(a)(res)
+    let tmp:[]i64 = map2(\a b -> if b then a else 0)(a)(map(\i -> any(\k -> k==n)(map(\j -> i*j)(a)) )(a))
     in filter(\i -> i!=0)(tmp)
-    in filter(\i -> i!=0)(tmp)
-    -- let (r,s) = loop (p, q) = (0, 0) for i < length(res) do if res[i] then if q==0 then (p,a[i]) else (a[i],q)
-    
-    -- loop (p,q) = (0,0) while p==0 do
-    --     if res[i] then 
-    --         if p == 0 then q=a[i] else p=a[i]
-    
-    -- let a:[]i64 = prime_array(n)
-    -- loop for p in a do
-    --     loop for q in a do
-    --         if p*q==n then in (p,q)
-
--- Example : 
-    -- let (i,_) = euclid_pgcd(n[0],n[1])
-    -- in i
-
-    -- euclid_ppcm(n[0],n[1])
 
 -- How quickly can we reduce arrays?
 --
